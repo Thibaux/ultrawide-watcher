@@ -4,13 +4,11 @@ from bs4 import BeautifulSoup
 import smtplib
 from decouple import config
 
-priceWanted = 340;
+priceWanted = 500;
 verkopers = []
 
 
-def Bol():
-	bolsMonitor = []
-
+def BolLg01():
 	url = 'https://bol.com/nl/p/lg-35wn65c-qhd-curved-ultrawide-monitor-35-inch/9300000005464338/?s2a=#productTitle'
 	headers = {"User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.11 Safari/537.36'}
 	page = requests.get(url, headers = headers)
@@ -18,9 +16,11 @@ def Bol():
 
 	lg_35WN65C = soup.find('span', {'class': 'promo-price'}).get_text()
 	Bol_lg35WN65C_price = int(lg_35WN65C[:6])
-	bolsMonitor.append(["Bol_lg35WN65C", Bol_lg35WN65C_price, url])
+
+	return ["Bol_lg35WN65C", Bol_lg35WN65C_price, url]
 
 
+def BolLg02():
 	url = 'https://www.bol.com/nl/p/philips-342b1c-full-hd-curved-monitor-34-inch/9200000122087022/?bltgh=oFPH4EnX9MqYQ1Kn0QJG9w.p9RidLfagZs7mKHdqgVNMw_0_48.51.ProductImage'
 	headers = {"User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.11 Safari/537.36'}
 	page = requests.get(url, headers = headers)
@@ -28,9 +28,8 @@ def Bol():
 
 	Philips_342B1C = soup.find('span', {'class': 'promo-price'}).get_text()
 	Philips_342B1C_price = int(Philips_342B1C[0:3])
-	bolsMonitor.append(["Philips_342B1C", Philips_342B1C_price, url])
 	
-	return bolsMonitor
+	return ["Philips_342B1C", Philips_342B1C_price, url]
 
 
 def Coolblue():
@@ -51,7 +50,7 @@ def threshold():
 	global verkopers
 	alleVerkopers = [];
 
-	alleVerkopers.extend([Bol()[0], Bol()[1], Coolblue()])
+	alleVerkopers.extend([BolLg01(), Coolblue()])
 
 	for verkoper in alleVerkopers:
 		if verkoper[1] <= priceWanted:
